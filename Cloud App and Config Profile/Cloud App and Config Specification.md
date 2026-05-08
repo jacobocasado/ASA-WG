@@ -22,6 +22,18 @@ The App Defense Alliance Application Security Assessment Working Group (ASA WG) 
 * Alex Duff (Meta)
 * Brad Ree (Google)
 
+### Abbreviated Terms
+| Abbreviation | Full Term |
+| --- | ----- |
+| MFA | Multi-Factor Authentication|
+| TLS | Transport Layer Security|
+| OpenSSH | Open Secure Shell|
+| IAM | Identity and Access Management|
+| MDM | Mobile Device Management|
+| SSO | Single Sign-On|
+| SCAP | Security Content Automation Protocol|
+| CIS | Center for Internet Security|
+
 ### Contributors
 * Alex Duff  (Meta)
 * Andrew Kiggins
@@ -197,6 +209,8 @@ The App Defense Alliance Application Security Assessment Working Group (ASA WG) 
 
 6.15 [Collect Detailed Audit Logs](#615-collect-detailed-audit-logs)
 
+6.16 [Centralize Account Management for Database Services](#616-centralize-account-management-for-database-services)
+
 
 
 
@@ -214,13 +228,19 @@ This document is intended for system and application administrators, security sp
 
 This profile builds upon the work of the Center for Internet Security (CIS), specifically their cloud foundations benchmarks.
 
-1. [CIS Amazon Web Services Foundations Benchmark v2.0.0](https://workbench.cisecurity.org/benchmarks/14207)
-2. [CIS Google Cloud Platform Foundation Benchmark v2.0.0](https://workbench.cisecurity.org/benchmarks/9562)
-3. [CIS Microsoft Azure Foundations Benchmark v2.0.0](https://workbench.cisecurity.org/benchmarks/10624)
+1. [CIS Amazon Web Services Foundations Benchmark v7.0.0](https://workbench.cisecurity.org/benchmarks/14207)
+2. [CIS Google Cloud Platform Foundation Benchmark v4.0.0](https://workbench.cisecurity.org/benchmarks/9562)
+3. [CIS Microsoft Azure Foundations Benchmark v5.0.0](https://workbench.cisecurity.org/benchmarks/10624)
+4. [CIS Microsoft Azure Compute Services Benchmark v2.0.0](https://workbench.cisecurity.org/benchmarks)
+5. [CIS Microsoft Azure Database Services Benchmark v2.0.0](https://workbench.cisecurity.org/benchmarks)
 
 # Licensing
 This work is licensed under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
+
+# Coverage Notes
+
+This release provides full CIS Level 1 coverage for AWS and GCP. Azure coverage includes all requirements from the CIS Azure Foundations Benchmark v5.0.0, CIS Azure Compute Services Benchmark v2.0.0, and CIS Azure Database Services Benchmark v2.0.0 that were present in the v1.0 profile, plus 76 additional requirements added in this release. Additional Azure CIS Level 1 requirements — including Microsoft Defender for Cloud, additional networking controls, and expanded private endpoint and CMK encryption checks — are planned for a future release.
 
 
 # 1 Compute
@@ -239,7 +259,9 @@ It is necessary to first identify the software that needs to be secured before t
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 1.1.1 | Azure | Ensure that Only Approved Extensions Are Installed |
+| 1.1.1 | Azure | REMOVED — Not in CIS Azure Foundations v5.0.0 L1 |
+| 1.1.2 | Azure | Ensure Virtual Machines Are Utilizing Managed Disks |
+| 1.1.3 | Azure | Ensure Only Approved Extensions Are Installed on Virtual Machines |
 
 ---
 ## 1.2 Ensure Authorized Software is Currently Supported
@@ -258,7 +280,8 @@ When software ceases to be supported, the maintainer of that software will no lo
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 1.2.1 | AWS | Ensure that all AWS Lambda functions are configured to use a current (not deprecated) runtime | 1.2.2 | Azure | Ensure that all Azure Functions are configured to use a current (not deprecated) runtime |
+| 1.2.1 | AWS | Ensure that all AWS Lambda functions are configured to use a current (not deprecated) runtime |
+| 1.2.2 | Azure | Ensure that all Azure Functions are configured to use a current (not deprecated) runtime |
 | 1.2.3 | Azure | Ensure That 'PHP version' is the Latest, If Used to Run the Web App |
 | 1.2.4 | Azure | Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App |
 | 1.2.5 | Azure | Ensure that 'Java version' is the latest, if used to run the Web App |
@@ -281,6 +304,19 @@ Encryption protects confidential data when transmitted over untrusted network co
 | 1.3.2 | Azure | Ensure Web App is using the latest version of TLS encryption |
 | 1.3.3 | Azure | Ensure FTP deployments are Disabled |
 | 1.3.4 | Google | Ensure “Block Project-Wide SSH Keys” Is Enabled for VM Instances |
+| 1.3.5 | Azure | Ensure End-to-End TLS Is Enabled for App Service Apps |
+| 1.3.6 | Azure | Ensure End-to-End TLS Is Enabled for App Service Slots |
+| 1.3.7 | Azure | Ensure End-to-End TLS Is Enabled for Function Apps |
+| 1.3.8 | Azure | Ensure End-to-End TLS Is Enabled for Function App Slots |
+| 1.3.9 | Azure | Ensure Remote Debugging Is Disabled for App Service Apps |
+| 1.3.10 | Azure | Ensure Remote Debugging Is Disabled for App Service Slots |
+| 1.3.11 | Azure | Ensure Remote Debugging Is Disabled for Function Apps |
+| 1.3.12 | Azure | Ensure Remote Debugging Is Disabled for Function App Slots |
+| 1.3.13 | Azure | Ensure App Service Environment Is Provisioned with v3 or Higher |
+| 1.3.14 | Azure | Ensure App Service Environment Has TLS 1.0 and 1.1 Disabled |
+| 1.3.15 | Azure | Ensure App Service Environment Has Cipher Suite Ordering Configured |
+| 1.3.16 | Azure | Ensure SSL Is Configured for CycleCloud |
+| 1.3.17 | Google | Ensure App Engine Applications Enforce HTTPS Connections |
 
 ---
 
@@ -302,7 +338,11 @@ Encryption at rest protects against some risks of unauthorized access to data, f
 
 | Spec | Platform | Description |
 |---|-----|----------|
-| 1.4.1 | Azure | Ensure Virtual Machines are utilizing Managed Disks |
+| 1.4.1 | Azure | REMOVED — Not in CIS Azure Foundations v5.0.0 L1 |
+| 1.4.2 | Azure | Ensure Batch Pool Disk Encryption Is Enabled |
+| 1.4.3 | Azure | Ensure Local Authentication Methods for Batch Accounts Are Disabled |
+| 1.4.4 | Azure | Ensure Trusted Launch Is Enabled on Virtual Machines |
+| 1.4.5 | Azure | Ensure Encryption at Host Is Enabled for Virtual Machines |
 
 ---
 
@@ -325,6 +365,25 @@ Firewalls help to prevent unauthorized users from accessing servers or sending m
 | Spec | Platform | Description |
 |---|-----|----------|
 | 1.5.1 | Google | Ensure That IP Forwarding Is Not Enabled on Instances |
+| 1.5.2 | Azure | Ensure Public Network Access Is Disabled for App Service Apps |
+| 1.5.3 | Azure | Ensure Public Network Access Is Disabled for App Service Slots |
+| 1.5.4 | Azure | Ensure Public Network Access Is Disabled for Function Apps |
+| 1.5.5 | Azure | Ensure Public Network Access Is Disabled for Function App Slots |
+| 1.5.6 | Azure | Ensure App Service Apps Are Integrated with a Virtual Network |
+| 1.5.7 | Azure | Ensure App Service Slots Are Integrated with a Virtual Network |
+| 1.5.8 | Azure | Ensure Function Apps Are Integrated with a Virtual Network |
+| 1.5.9 | Azure | Ensure Function App Slots Are Integrated with a Virtual Network |
+| 1.5.10 | Azure | Ensure All Traffic Is Routed Through VNet for App Service Apps |
+| 1.5.11 | Azure | Ensure All Traffic Is Routed Through VNet for App Service Slots |
+| 1.5.12 | Azure | Ensure All Traffic Is Routed Through VNet for Function Apps |
+| 1.5.13 | Azure | Ensure All Traffic Is Routed Through VNet for Function App Slots |
+| 1.5.14 | Azure | Ensure Private VNets Are Used for Container Instances |
+| 1.5.15 | Azure | Ensure a Managed Identity Is Used for Container Instances |
+| 1.5.16 | Azure | Ensure Least Privilege for Container Instance Managed Identity |
+| 1.5.17 | Azure | Ensure Public Network Access Is Disabled for Batch Accounts |
+| 1.5.18 | Azure | Ensure VM Disk Network Access Is Not Set to Enable Public Access |
+| 1.5.19 | Azure | Ensure VM Data Access Authentication Mode Is Enabled |
+| 1.5.20 | Google | Ensure That Compute Instances Do Not Have Public IP Addresses |
 
 ---
 
@@ -345,6 +404,10 @@ Products typically ship with insecure defaults that, if not configured securely,
 |---|-----|----------|
 | 1.6.1 | Google | Ensure That Instances Are Not Configured To Use the Default Service Account |
 | 1.6.2 | Google | Ensure That Instances Are Not Configured To Use the Default Service Account With Full Access to All Cloud APIs |
+| 1.6.3 | Azure | Ensure Managed Identities Are Configured for App Service Apps |
+| 1.6.4 | Azure | Ensure Managed Identities Are Configured for App Service Slots |
+| 1.6.5 | Azure | Ensure Managed Identities Are Configured for Function Apps |
+| 1.6.6 | Azure | Ensure Managed Identities Are Configured for Function App Slots |
 
 ---
 
@@ -387,6 +450,7 @@ Centralizing makes administration simpler and therefore reduces risks related to
 |---|-----|----------|
 | 1.8.1 | Azure | Ensure that Register with Azure Active Directory is enabled on App Service |
 | 1.8.2  | Google | Ensure Oslogin Is Enabled for a Project |
+| 1.8.3  | Google | Ensure Compute Instances Are Launched With Shielded VM Enabled |
 
 
 ---
@@ -411,6 +475,7 @@ Establish and maintain a data recovery process. In the process, address the scop
 | Spec | Platform | Description |
 |---|-----|----------|
 | 2.1.1 | Azure | Ensure the Key Vault is Recoverable |
+| 2.1.2 | Azure | Ensure Key Vault Public Network Access is Disabled |
 
 ---
 
@@ -475,8 +540,9 @@ Actively manage (inventory, track, and correct) all software (operating systems 
 | Spec | Platform | Description |
 |---|-----|----------|
 | 2.4.1 | Azure | Ensure <code>User consent for applications</code> is set to <code>Do not allow user consent |
-| 2.4.2 | Azure | Ensure that 'Users can add gallery apps to My Apps' is set to 'No' |
+| 2.4.2 | Azure | REMOVED — Not in CIS Azure Foundations v5.0.0 |
 | 2.4.3 | Azure | Ensure That ‘Users Can Register Applications’ Is Set to ‘No’ |
+| 2.4.4 | Azure | Ensure that ‘Restrict non-admin users from creating tenants’ is set to ‘Yes’ |
 
 ---
 
@@ -500,6 +566,7 @@ Develop processes and technical controls to identify, classify, securely handle,
 | 2.5.2 | Azure | Ensure that the Expiration Date that is no more than 90 days in the future is set for all Keys in Non-RBAC Key Vaults. |
 | 2.5.3 | Azure | Ensure that the Expiration Date that is no more than 90 days in the future is set for all Secrets in RBAC Key Vaults |
 | 2.5.4 | Azure | Ensure that the Expiration Date that is no more than 90 days in the future is set for all Secrets in Non-RBAC Key Vaults |
+| 2.5.5 | Azure | Ensure certificate Validity Period is less than or equal to 12 months |
 
 
 ---
@@ -543,11 +610,14 @@ The principle of least privilege reduces the risk of unauthorized actions being 
 | Spec | Platform | Description |
 |---|-----|----------|
 | 2.7.1 | AWS | Ensure no 'root' user account access key exists |
-| 2.7.2 | Aws | Do not setup access keys during initial user setup for all IAM users that have a console password |
+| 2.7.2 | AWS | REMOVED — Retired in CIS v7.0.0 |
 | 2.7.3 | AWS | Ensure IAM policies that allow full "_:_" administrative privileges are not attached |
 | 2.7.4 | Azure | Ensure That 'Guest users access restrictions' is set to 'Guest user access is restricted to properties and memberships of their own directory objects' |
 | 2.7.5 | Google | Ensure That IAM Users Are Not Assigned the Service Account User or Service Account Token Creator Roles at Project Level |
 | 2.7.6 | Google | Ensure That Cloud KMS Cryptokeys Are Not Anonymously or Publicly Accessible |
+| 2.7.7 | AWS | Ensure access to AWSCloudShellFullAccess is restricted |
+| 2.7.8 | AWS | Ensure AWS resource policies do not allow unrestricted access using "Principal": "*" |
+| 2.7.9 | Google | Ensure KMS Encryption Keys Are Rotated Within a Period of 90 Days |
 
 
 ---
@@ -569,8 +639,16 @@ Establish and maintain a secure configuration process for enterprise assets (end
 |---|-----|----------|
 | 2.8.1 | Azure | Ensure Security Defaults is enabled on Azure Active Directory |
 | 2.8.2 | AWS | Ensure IAM password policy requires minimum length of 14 or greater |
-| 2.8.3 | AWS | Ensure there is only one active access key available for any single IAM user |
+| 2.8.3 | AWS | REMOVED — Retired in CIS v7.0.0 |
 | 2.8.4 | AWS | Ensure access keys are rotated every 90 days or less |
+| 2.8.5 | AWS | Ensure that all expired SSL/TLS certificates stored in AWS IAM are removed |
+| 2.8.6 | Google | Ensure That There Are Only GCP-Managed Service Account Keys for Each Service Account |
+| 2.8.7 | Azure | Ensure that account 'Lockout threshold' is less than or equal to '10' |
+| 2.8.8 | Azure | Ensure that account 'Lockout duration in seconds' is greater than or equal to '60' |
+| 2.8.9 | Azure | Ensure Basic Auth Publishing Credentials Are Disabled for App Service Apps |
+| 2.8.10 | Azure | Ensure Basic Auth Publishing Credentials Are Disabled for App Service Slots |
+| 2.8.11 | Azure | Ensure Basic Auth Publishing Credentials Are Disabled for Function Apps |
+| 2.8.12 | Azure | Ensure Basic Auth Publishing Credentials Are Disabled for Function App Slots |
 
 ---
 
@@ -611,6 +689,9 @@ Ensuring that dormant accounts are disabled when they're no longer needed reduce
 |---|-----|----------|
 | 2.10.1 | AWS | Ensure credentials unused for 45 days or greater are disabled |
 | 2.10.2 | Azure | Ensure Guest Users Are Reviewed on a Regular Basis |
+| 2.10.3 | Google | Ensure User-Managed/External Keys for Service Accounts Are Rotated Every 90 Days or Fewer |
+| 2.10.4 | Azure | Ensure Disabled Accounts Do Not Have Permissions |
+| 2.10.5 | Azure | Ensure 'Tenant Creator' Role Assignments Are Reviewed Periodically |
 
 ---
 
@@ -633,6 +714,11 @@ As a matter of good practice, users who can take administrative actions should u
 | 2.11.2 | Azure | Ensure That 'Notify all admins when other admins reset their password?' is set to 'Yes' |
 | 2.11.3 | Azure | Ensure That 'Restrict access to Azure AD administration portal' is Set to 'Yes' |
 | 2.11.4 | Azure | Ensure That No Custom Subscription Administrator Roles Exist |
+| 2.11.6 | Azure | Ensure that Azure admin accounts are not used for daily operations |
+| 2.11.7 | Azure | Ensure that use of the 'User Access Administrator' role is restricted |
+| 2.11.8 | Azure | Ensure that all 'privileged' role assignments are periodically reviewed |
+| 2.11.9 | Azure | Ensure fewer than 5 users have global administrator assignment |
+| 2.11.10 | Azure | Ensure there are between 2 and 3 subscription owners |
 | 2.11.5 | Google | Ensure That Service Account Has No Admin Privileges |
 
 
@@ -697,10 +783,12 @@ Requiring MFA makes it harder for malicious attackers to takeover accounts, e.g.
 | 2.14.2 | Azure | Ensure that 'Require Multi-Factor Authentication to register or join devices with Azure AD' is set to 'Yes' |
 | 2.14.3 | Azure | Ensure that 'Multi-Factor Auth Status' is 'Enabled' for all Privileged Users |
 | 2.14.4 | Azure | Ensure that 'Allow users to remember multi-factor authentication on devices they trust' is Disabled |
-| 2.14.5 | Azure | Ensure that A Multi-factor Authentication Policy Exists for All Users |
-| 2.14.6 | Azure | Ensure Multi-factor Authentication is Required for Risky Sign-ins |
+| 2.14.5 | Azure | REMOVED — Reclassified to Level 2 in CIS v5.0.0 (5.2.4) |
+| 2.14.6 | Azure | REMOVED — Reclassified to Level 2 in CIS v5.0.0 (5.2.5) |
 | 2.14.7 | Google | Ensure that Multi-Factor Authentication is 'Enabled' for All Non-Service Accounts |
 | 2.14.8 | Azure | Ensure that 'Multi-Factor Auth Status' is 'Enabled' for all Non-Privileged Users |
+| 2.14.9 | AWS | Ensure MFA is enabled for all IAM users that have a console password |
+| 2.14.10 | Azure | Ensure that 'multifactor authentication' is 'enabled' for all users |
 
 ---
 
@@ -719,8 +807,8 @@ Requiring MFA makes it harder for malicious attackers to takeover accounts, e.g.
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 2.15.1 | Azure | Ensure that A Multi-factor Authentication Policy Exists for Administrative Groups |
-| 2.15.2 | Azure | Ensure Multi-factor Authentication is Required for Azure Management |
+| 2.15.1 | Azure | REMOVED — Reclassified to Level 2 in CIS v5.0.0 (5.2.7) |
+| 2.15.2 | Azure | REMOVED — Reclassified to Level 2 in CIS v5.0.0 (5.2.6) |
 
 
 ---
@@ -780,6 +868,7 @@ Standardizing the mechanism for granting cloud permissions reduces the risk of a
 | Spec | Platform | Description |
 |---|-----|----------|
 | 2.18.1 | AWS | Ensure IAM Users Receive Permissions Only Through Groups |
+| 2.18.2 | Azure | Ensure All Non-Privileged Role Assignments Are Reviewed Periodically |
 
 ---
 
@@ -819,6 +908,7 @@ Tools must be tuned to reduce the prevalence of both false negatives and false p
 | Spec | Platform | Description |
 |---|-----|----------|
 | 3.2.1 | Azure | Ensure That 'Notify about alerts with the following severity' is Set to 'High' |
+| 3.2.2 | Azure | Ensure that 'Notify about attack paths with the following risk level or higher' is enabled |
 
 ---
 
@@ -879,8 +969,8 @@ The principle of least privilege reduces the risk of unauthorized actions being 
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 3.5.1 | AWS | Ensure the S3 bucket used to store CloudTrail logs is not publicly accessible  |
-| 3.5.2 | Azure | Ensure the Storage Container Storing the Activity Logs is not Publicly Accessible |
+| 3.5.1 | AWS | REMOVED — Retired in CIS v7.0.0; covered by 5.5.1 (S3 Block Public Access) |
+| 3.5.2 | Azure | REMOVED — Not in CIS Azure Foundations v5.0.0 L1 |
 
 ---
 
@@ -922,6 +1012,7 @@ Patching remediates known vulnerabilities. Using automation makes this process r
 | Spec | Platform | Description |
 |---|-----|----------|
 | 3.7.1 | Azure | Ensure that Microsoft Defender Recommendation for 'Apply system updates' status is 'Completed' |
+| 3.7.2 | Google | Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects |
 
 ---
 
@@ -942,7 +1033,16 @@ Tools can help to identify vulnerabilities that require remediation.
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 3.8.1 | Azure | Ensure that Auto provisioning of 'Log Analytics agent for Azure VMs' is Set to 'On' |
+| 3.8.1 | Azure | REMOVED — Removed from CIS Azure Foundations v5.0.0 |
+| 3.8.2 | AWS | Ensure that IAM External Access Analyzer is enabled for all regions |
+| 3.8.3 | Azure | Ensure Azure Databricks is Deployed in a Customer-Managed VNet |
+| 3.8.4 | Azure | Ensure NSGs are Configured for Databricks Subnets |
+| 3.8.5 | Azure | Ensure Users and Groups are Synced from Entra ID to Databricks |
+| 3.8.6 | Azure | Ensure Unity Catalog is Configured for Azure Databricks |
+| 3.8.7 | Azure | Ensure PAT Usage is Restricted and Expiry is Enforced for Databricks |
+| 3.8.8 | Azure | Ensure Diagnostic Log Delivery is Configured for Azure Databricks |
+| 3.8.9 | Azure | Ensure 'No Public IP' is Enabled for Azure Databricks |
+| 3.8.10 | Azure | Ensure Public Network Access is Disabled for Azure Databricks |
 
 ---
 
@@ -972,6 +1072,8 @@ Logs may contain indications of compromise, so it's important to review logs reg
 | 3.9.7 | AWS | Ensure route table changes are monitored |
 | 3.9.8 | AWS | Ensure VPC changes are monitored |
 | 3.9.9 | AWS | Ensure AWS Organizations changes are monitored |
+| 3.9.12 | AWS | Ensure security group changes are monitored |
+| 3.9.13 | AWS | Ensure Network Access Control Lists (NACL) changes are monitored |
 | 3.9.10 | Google | Ensure That Cloud Audit Logging Is Configured Properly |
 | 3.9.11 | Google | Ensure That Cloud DNS Logging Is Enabled for All VPC Networks |
 
@@ -993,13 +1095,14 @@ Having log files of what actions have taken place by users and also system event
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 3.10.1 | Google | Ensure That Sinks Are Configured for All Log Entries |
+| 3.10.1 | Google | REMOVED — Withdrawn in favor of 3.10.5 |
 | 3.10.2 | Google | Ensure Log Metric Filter and Alerts Exist for Project Ownership Assignments/Changes |
 | 3.10.3 | Google | Ensure That the Log Metric Filter and Alerts Exist for Audit Configuration Changes |
 | 3.10.4 | Google | Ensure That the Log Metric Filter and Alerts Exist for Custom Role Changes |
 | 3.10.5 | Google | Ensure That Audit Logs are retained for a Minimum of 90 Days |
 | 3.10.6 | AWS | Ensure That Audit Logs are retained for a Minimum of 90 Days |
 | 3.10.7 | Azure | Ensure That Audit Logs are retained for a Minimum of 90 Days |
+| 3.10.8 | Google | Ensure That Retention Policies on Cloud Storage Buckets Used for Exporting Logs Are Configured Using Bucket Lock |
 
 ---
 
@@ -1019,7 +1122,7 @@ Detailed logs with timestamps provide a record of user activity, system events, 
 | Spec | Platform | Description |
 |---|-----|----------|
 | 3.11.1 | AWS | Ensure CloudTrail is enabled in all regions |
-| 3.11.2 | AWS | Ensure CloudTrail trails are integrated with CloudWatch Logs |
+| 3.11.2 | AWS | REMOVED — Retired in CIS v7.0.0 |
 | 3.11.3 | Azure | Ensure that Azure Monitor Resource Logging is Enabled for All Services that Manage, Store, or Secure Confidential Data |
 | 3.11.4 | Azure | Ensure that logging for Azure Key Vault is 'Enabled' |
 | 3.11.5 | Azure | Ensure that Activity Log Alert exists for Create Policy Assignment |
@@ -1032,6 +1135,11 @@ Detailed logs with timestamps provide a record of user activity, system events, 
 | 3.11.12 | Azure | Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule |
 | 3.11.13 | Azure | Ensure that Activity Log Alert exists for Create or Update Public IP Address rule |
 | 3.11.14 | Azure | Ensure that Activity Log Alert exists for Delete Public IP Address rule |
+| 3.11.15 | Azure | Ensure that a 'Diagnostic Setting' exists for Subscription Activity Logs |
+| 3.11.16 | Azure | Ensure Diagnostic Setting captures appropriate categories |
+| 3.11.17 | Azure | Ensure that an Activity Log Alert exists for Service Health |
+| 3.11.18 | AWS | Ensure all AWS-managed web front-end services have access logging enabled |
+| 3.11.19 | Azure | Ensure Diagnostics Logs Are Enabled for Batch Accounts |
 
 
 ---
@@ -1080,6 +1188,7 @@ This CIS Control provides guidance for securing hardware and software. As delive
 | 4.2.3 | Google | Ensure That RSASHA1 Is Not Used for the Key-Signing Key in Cloud DNS DNSSEC |
 | 4.2.4 | Google | Ensure That RSASHA1 Is Not Used for the Zone-Signing Key in Cloud DNS DNSSEC |
 | 4.2.5 | AWS | Ensure that EC2 Metadata Service only allows IMDSv2 |
+| 4.2.6 | Azure | Ensure Public IP Addresses Are Evaluated Periodically |
 
 ---
 
@@ -1100,11 +1209,17 @@ Firewalls help to prevent unauthorized users from accessing servers or sending m
 |---|-----|----------|
 | 4.3.1 | Azure | Ensure that RDP access from the Internet is evaluated and restricted |
 | 4.3.2 | Azure | Ensure that SSH access from the Internet is evaluated and restricted |
-| 4.3.3 | Google | Ensure That SSH Access Is Restricted From the Internet |
-| 4.3.4 | Google | Ensure That RDP Access Is Restricted From the Internet |
-| 4.3.5 | AWS | Ensure no Network ACLs allow ingress from 0.0.0.0/0 to remote server administration ports |
+| 4.3.3 | Google | REMOVED — Reclassified to Level 2 in CIS v4.0.0 |
+| 4.3.4 | Google | REMOVED — Reclassified to Level 2 in CIS v4.0.0 |
+| 4.3.5 | AWS | REMOVED — Withdrawn in favor of 4.3.6 and 4.3.7 |
 | 4.3.6 | AWS | Ensure no security groups allow ingress from 0.0.0.0/0 to remote server administration ports |
 | 4.3.7 | AWS | Ensure no security groups allow ingress from ::/0 to remote server administration ports |
+| 4.3.8 | AWS | Ensure CIFS access is restricted to trusted networks to prevent unauthorized access |
+| 4.3.9 | Azure | Ensure that UDP access from the Internet is evaluated and restricted |
+| 4.3.10 | Azure | Ensure that HTTP(S) access from the Internet is evaluated and restricted |
+| 4.3.11 | Azure | Ensure subnets are associated with network security groups |
+| 4.3.12 | Azure | Ensure the SSL policy min protocol version is set to TLSv1_2 or higher on Azure Application Gateway |
+| 4.3.13 | Azure | Ensure HTTP2 is set to Enabled on Azure Application Gateway |
 
 
 ---
@@ -1130,6 +1245,10 @@ Organizations need to establish and maintain data recovery practices sufficient 
 | Spec | Platform | Description |
 |---|-----|----------|
 | 5.1.1 | Azure | Ensure Soft Delete is Enabled for Azure Containers and Blob Storage |
+| 5.1.2 | Azure | Ensure soft delete for Azure File Shares is Enabled |
+| 5.1.3 | Azure | Ensure SMB protocol version is set to SMB 3.1.1 or higher for SMB file shares |
+| 5.1.4 | Azure | Ensure SMB channel encryption is set to AES-256-GCM or higher |
+| 5.1.5 | Azure | Ensure that soft delete for containers on Azure Blob Storage is Enabled |
 
 ---
 
@@ -1149,6 +1268,8 @@ Malicious actors can exploit insecure services, poor firewall and network config
 | Spec | Platform | Description |
 |---|-----|----------|
 | 5.2.1 | Azure | Ensure Default Network Access Rule for Storage Accounts is Set to Deny |
+| 5.2.2 | Azure | Ensure that Public Network Access is Disabled for storage accounts |
+| 5.2.3 | Azure | Ensure Cross-Tenant Replication is Disabled for Storage Accounts |
 
 ---
 
@@ -1168,7 +1289,7 @@ Encryption protects confidential data when transmitted over untrusted network co
 | Spec | Platform | Description |
 |---|-----|----------|
 | 5.3.1 | Azure | Ensure that 'Secure transfer required' is set to 'Enabled' |
-| 5.3.2  Azure | Ensure the "Minimum TLS version" for storage accounts is set to "Version 1.2" |
+| 5.3.2 | Azure | Ensure the "Minimum TLS version" for storage accounts is set to "Version 1.2" |
 
 ---
 
@@ -1212,6 +1333,9 @@ The principle of least privilege reduces the risk of unauthorized actions being 
 | 5.5.1 | AWS | Ensure that S3 Buckets are configured with 'Block public access (bucket settings)' |
 | 5.5.2 | Azure | Ensure that 'Public access level' is disabled for storage accounts with blob containers |
 | 5.5.3 | Google | Ensure That Cloud Storage Bucket Is Not Anonymously or Publicly Accessible |
+| 5.5.4 | Google | Ensure That BigQuery Datasets Are Not Anonymously or Publicly Accessible |
+| 5.5.5 | Azure | Ensure Default to Entra Authorization in the Azure Portal is Enabled for Storage |
+| 5.5.6 | Google | Ensure That Cloud Storage Buckets Have Uniform Bucket-Level Access Enabled |
 
 ---
 
@@ -1251,6 +1375,8 @@ Secure management of assets and software guards against malicious users from bei
 | Spec | Platform | Description |
 |---|-----|----------|
 | 5.7.1 | Azure | Ensure that Storage Account Access Keys are Periodically Regenerated |
+| 5.7.2 | Azure | Ensure Allow storage account key access for Azure Storage Accounts is Disabled |
+| 5.7.3 | Azure | Ensure ARM Delete Locks Are Applied to Storage Accounts |
 
 ---
 
@@ -1295,6 +1421,7 @@ Industry-recommended hardening configuration templates reduce the attack surface
 | Spec | Platform | Description |
 |---|-----|----------|
 | 6.1.1 | Google | Ensure That the ‘Local_infile’ Database Flag for a Cloud SQL MySQL Instance Is Set to ‘Off’ |
+| 6.1.2 | AWS | Ensure Multi-AZ deployments are used for enhanced availability in Amazon RDS |
 
 ---
 
@@ -1340,6 +1467,13 @@ Encryption protects confidential data when transmitted over untrusted network co
 | 6.3.2 | Azure | Ensure 'Enforce SSL connection' is set to 'Enabled' for Standard MySQL Database Server |
 | 6.3.3 | Azure | Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database Server |
 | 6.3.4 | Google | Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL |
+| 6.3.5 | Azure | Ensure Entra ID Authentication Is Configured for Azure Cache for Redis |
+| 6.3.6 | Azure | Ensure 'SSL Only' Is Enabled for Azure Cache for Redis |
+| 6.3.7 | Azure | Ensure TLS 1.2 or Higher Is Required for Azure Cache for Redis |
+| 6.3.8 | Azure | Ensure Entra ID-Only Authentication Is Enabled for MySQL Flexible Server |
+| 6.3.9 | Azure | Ensure Entra ID-Only Authentication Is Enabled for PostgreSQL Flexible Server |
+| 6.3.10 | Azure | Ensure 'ssl_min_protocol_version' Is Set to TLSv1.2 for PostgreSQL Flexible Server |
+| 6.3.11 | Azure | Ensure Minimum TLS Version Is Set to 1.2 for Azure SQL Database |
 
 
 ---
@@ -1389,6 +1523,7 @@ The principle of least privilege reduces the risk of unauthorized actions being 
 | 6.5.4 | Google | Ensure ‘Skip_show_database’ Database Flag for Cloud SQL MySQL Instance Is Set to ‘On’ |
 | 6.5.5 | Google | Ensure that the 'cross db ownership chaining' database flag for Cloud SQL SQL Server instance is set to 'off' |
 | 6.5.6 | Google | Ensure that the 'contained database authentication' database flag for Cloud SQL on the SQL Server instance is set to 'off' |
+| 6.5.7 | Azure | Ensure Local Authentication Is Disabled for Cosmos DB |
 
 ---
 
@@ -1411,6 +1546,8 @@ This CIS Control provides guidance for securing hardware and software. As delive
 |---|-----|----------|
 | 6.6.1 | Google | Ensure 'user options' database flag for Cloud SQL SQL Server instance is not configured |
 | 6.6.2 | Google | Ensure '3625 (trace flag)' database flag for all Cloud SQL Server instances is set to 'on' |
+| 6.6.3 | Google | Ensure 'user Connections' Database Flag for Cloud SQL SQL Server Instance Is Set to a Non-limiting Value |
+| 6.6.4 | Azure | Ensure 'connection_throttle.enable' Is Set to 'ON' for PostgreSQL Flexible Server |
 
 
 ---
@@ -1432,7 +1569,8 @@ Firewalls help to prevent unauthorized users from accessing servers or sending m
 ### Audit
 | Spec | Platform | Description |
 |---|-----|----------|
-| 6.7.1 | Azure | Ensure 'Allow access to Azure services' for PostgreSQL Database Server is disabled |
+| 6.7.1 | Azure | REMOVED — Not in CIS Azure Database Services v2.0.0 L1 |
+| 6.7.2 | Azure | Ensure Cosmos DB Firewall Rules Are Configured |
 
 ---
 
@@ -1497,7 +1635,7 @@ Uninstalling and disabling unnecessary services reduces the target area of your 
 ---
 
 
-### 6.11 Centralize Account Management
+## 6.11 Centralize Account Management
 
 
 ### Description
@@ -1533,6 +1671,7 @@ Patching remediates known vulnerabilities. Using automation makes this process r
 | Spec | Platform | Description |
 |---|-----|----------|
 | 6.12.1 | AWS | Ensure Auto Minor Version Upgrade feature is Enabled for RDS Instances |
+| 6.12.2 | Google | Ensure That Cloud SQL Database Instances Are Configured With Automated Backups |
 
 ---
 
@@ -1602,5 +1741,33 @@ Detailed logs with timestamps provide a record of user activity, system events, 
 | 6.15.6 | Google | Ensure That the ‘Log_min_duration_statement’ Database Flag for Cloud SQL PostgreSQL Instance Is Set to ‘-1′ (Disabled) |
 | 6.15.7 | Google | Ensure That 'cloudsql.enable_pgaudit' Database Flag for each Cloud Sql Postgresql Instance Is Set to 'on' For Centralized Logging |
 | 6.15.8 | AWS | Database logging should be enabled |
+| 6.15.9 | Azure | Ensure Diagnostic Logging Is Enabled for Cosmos DB |
+| 6.15.10 | Azure | Ensure SQL Database Audit Retention Is Greater Than 90 Days |
+| 6.15.11 | Google | Ensure 'Log_error_verbosity' Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'DEFAULT' or Stricter |
+| 6.15.12 | Google | Ensure 'Log_statement' Database Flag for Cloud SQL PostgreSQL Instance Is Set Appropriately |
+
+---
+
+
+## 6.16 Centralize Account Management for Database Services
+
+
+### Description
+
+Centralize account management through a directory or identity service for database services. Ensure managed identities are used where supported.
+
+
+### Rationale
+
+Centralizing makes administration simpler and therefore reduces risks related to unauthorized account creation or usage. Managed identities eliminate the need for hard-coded credentials.
+
+
+### Audit
+| Spec | Platform | Description |
+|---|-----|----------|
+| 6.16.1 | Azure | Ensure Managed Identity Is Used for Azure Cache for Redis |
+| 6.16.2 | Azure | Ensure Access Keys Authentication Is Disabled for Azure Cache for Redis |
+| 6.16.3 | Azure | Ensure Stable Update Channel Is Used for Azure Cache for Redis |
+| 6.16.4 | Azure | Ensure Managed Identities Are Configured for Data Factory |
 
 ---
