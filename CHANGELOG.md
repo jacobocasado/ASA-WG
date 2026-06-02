@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.0] April 3, 2026
 
 ### Changed
+- Removed embedded Revision History tables from MASA, CASA, and Cloud App & Config spec documents; version history is now tracked via GitHub Releases and CHANGELOG.md
 - Rebranding Mobile App Profile from ASA to MASA v2 (#212)
 - Rebranding Web App Profile from ASA to CASA v2 (#213)
 - Updated submission form processes
