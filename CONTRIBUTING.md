@@ -53,6 +53,8 @@ When the WG is ready to propose a release:
 2. **Update `CHANGELOG.md`** on the release branch:
    - Move items from `[Unreleased]` to the new version section.
    - Include the date and a summary of all changes.
+   - Update the top-of-file version stamp in each changed spec to the target release version.
+   - Update the "Specification Version" box in each affected Lab Template (`Submission Forms and Templates/Lab Templates/*.docx`) to the target release version, so the report templates stay in sync with the specs they reference.
 3. **Open a PR targeting `main`** from the release branch.
    - Title: `Release vX.Y.Z`
    - Body: Summary of all included WG PRs and their issue references.
@@ -86,6 +88,12 @@ This project uses [Semantic Versioning](https://semver.org/):
 - **Major** (e.g., `v2.0.0`): Significant changes to profiles, new profiles, or breaking changes to existing requirements.
 - **Minor** (e.g., `v1.1.0`): New requirements added, non-breaking modifications to existing requirements.
 - **Patch** (e.g., `v1.0.1`): Clarifications, typo fixes, editorial corrections that do not change the substance of any requirement.
+
+### Document versioning
+
+Per-document **Revision History tables are not maintained**. The canonical change history is GitHub Releases (semver tags on `main`) and `CHANGELOG.md`. Each published artifact carries a single `Version X.Y.Z — DATE` stamp at the top so standalone copies remain citable; this stamp is updated on the release branch during Stage 3 (alongside the `CHANGELOG.md` update) and reflects the release tag applied in Stage 4.
+
+The Lab Templates (`Submission Forms and Templates/Lab Templates/*.docx`) each carry a "Specification Version" box identifying the spec version a report was produced against. This box is updated on the release branch during Stage 3, in the same step as the spec version stamps, so the templates always reference the current released specification version.
 
 ## Consensus & Voting
 

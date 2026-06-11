@@ -5,6 +5,14 @@ All notable changes to the ASA-WG standards will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.1] - 2026-06-03
+
+### Changed
+- Removed embedded Revision History tables from MASA, CASA, and Cloud App & Config spec documents; version history is now tracked via GitHub Releases and CHANGELOG.md (#341)
+- Added a "Document versioning" convention to `CONTRIBUTING.md`: the canonical change history is GitHub Releases + `CHANGELOG.md`, and each spec carries a single top-of-file version stamp updated on the release branch
+- Updated the "Specification Version" box in all Lab Templates to `v2.1.1` so the report templates stay in sync with the released specs, and documented this as a required Stage 3 release step in `CONTRIBUTING.md` (#330)
+- Added an "Engagement team members" row to the front-page table of all Lab Templates (Compliance Report and Developer Test Report), so the CB can verify the personnel who performed the assessment hold the qualifications required by the ADA scope (#206)
+
 ## [2.1.0] - 2026-05-06
 
 ### Added — Cloud App & Configuration Profile
